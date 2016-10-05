@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-"""csv2influx: write CSV data into InfluxDB thanks to Influx's line protocol syntax.
-If the input CSV file has no header row to name the columns, you can use the --no-header
-option and rely on a 0-based numerotation of the columns to specify which ones are tags
-or fields.
+"""csv2influx: write CSV data into InfluxDB thanks to Influx's Line Protocol syntax.
+The CSV files must have a header row so csv2inlux can properly match and write
+fields' and tags' labels.
+If you target more than one input CSV file, csv2influx will consider they are all
+identical in terms of structure and CSV options (delimiter, quoting, etc).
+Finally, tags won't be automatically sorted to improve performances.  Feel free to
+do so manually by providing --tag-columns with a sorted list if you prefer.
 
 Usage:
   csv2influx.py PATH [--output-path PATH] [--measurement NAME] [--tag-columns TAGS] --field-columns FIELDS [--timestamp TIME] [--load-url URL]
@@ -16,7 +19,7 @@ Options:
                             will be written
   --measurement NAME        name of the measurement [default: sample_measurement]
   --tag-columns TAGS        comma-separated list of columns to use as tags; use * (star)
-                            to select all columns minus those specified as fields [default: *]
+                            to select all columns minus those specified as fields
   --field-columns FIELDS    comma-separated list of columns to use as fields
   --timestamp TIME          any format that Arrow can read with Arrow.get()
   --load-url URL            url of the InfluxDB's write endpoint where you'd like to post data
@@ -24,12 +27,10 @@ Options:
 
 Examples:
   csv2influx.py fixtures/*.csv --output-path=output/ --field-columns=speed --timestamp=2016-09-26T02:00:00+00:00
-  csv2influx.py fixtures/*.csv --output-path=output/result.out --field-columns=speed,strength --tag-columns=name,class --timestamp=2016-09-26
+  csv2influx.py fixtures/sample.csv --output-path=output/result.out --field-columns=speed,strength --tag-columns=name,class --timestamp=2016-09-26
 """
 
 # TODO:
-#   -s URL --server=URL       influxdb server [default: http://localhost:8086]
-#   -d NAME --database=NAME   database name [default: test]
 #   --no-header               specify that the input file has no header row (TODO)
 #   --csv-options             specify CSV options like the delimiter, etc (TODO)
 #   --timestamp-precision     specify the precision to be used in the final result; possible values

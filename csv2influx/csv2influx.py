@@ -27,8 +27,9 @@ Options:
                             (example: http://localhost:8086/write?db=mydb)
 
 Examples:
-  csv2influx.py fixtures/*.csv --output-path=output/ --field-columns=speed:int --timestamp=2016-09-26T02:00:00+00:00
-  csv2influx.py fixtures/sample.csv --output-path=output/result.out --field-columns=speed:int,strength:float --tag-columns=name,class --timestamp=2016-09-26
+  csv2influx.py some/data/*.csv --output-path=output/ --measurement=movement --field-columns=speed:int --timestamp=2016-09-26T02:00:00+00:00
+  csv2influx.py some/data/sample.csv --output-path=output/result.out --field-columns=speed:int,strength:float --tag-columns=name,class --timestamp=2016-09-26
+  csv2influx.py some/data/*/sample.csv --field-columns=speed:int --timestamp=2016-09-26T02:00:00+00:00 --influx-url=http://localhost:8086/write?db=mydb
 """
 
 # TODO:

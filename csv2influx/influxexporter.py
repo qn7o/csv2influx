@@ -18,7 +18,7 @@ class InfluxExporter(object):
         self.field_columns = []
         self.field_types = {}
         for e in field_columns:
-            label, typ = e.split(self.FIELD_LABEL_TYPE_SEP)
+            label, typ = e.rsplit(self.FIELD_LABEL_TYPE_SEP, 1)
             if typ not in self.FIELD_VALID_TYPES:
                 raise Exception('Wrong field type.  Valid types are: %s' % self.FIELD_VALID_TYPES)
             self.field_columns.append(self.sanitize(label))

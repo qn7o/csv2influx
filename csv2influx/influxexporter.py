@@ -39,7 +39,7 @@ class InfluxExporter(object):
         )
 
     @staticmethod
-    def sanitize(self, value):
+    def sanitize(value):
         """
         Measurements, tag keys, tag values, and field keys are always strings.
         For tag keys, tag values, and field keys always use a backslash character `\` to escape:
@@ -50,7 +50,7 @@ class InfluxExporter(object):
         return value.replace(',', '\,').replace(' ', '\ ').replace('=', '\=').lower()
 
     @staticmethod
-    def sanitize_measurement(self, value):
+    def sanitize_measurement(value):
         """
         Measurements, tag keys, tag values, and field keys are always strings.
         For measurements always use a backslash character `\` to escape: commas `,`, spaces.
@@ -60,7 +60,7 @@ class InfluxExporter(object):
         return value.replace(',', '\,').replace(' ', '\ ').lower()
 
     @staticmethod
-    def sanitize_field_value(self, value, typ):
+    def sanitize_field_value(value, typ):
         """
         Field values can be floats (float), integers (int), strings (str), or booleans (bool).
         For string field values use a backslash character `\` to escape: double quotes `"`.

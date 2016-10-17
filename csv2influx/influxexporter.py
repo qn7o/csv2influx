@@ -25,6 +25,10 @@ class InfluxExporter(object):
             self.field_types[self.sanitize(label)] = typ
         self.timestamp = timestamp
 
+        # Consistency check: each specified tags and fields should match a label
+        if not set(self.tag_columns + self.field_columns).issubset(set(self.labels)):
+            raise Exception('Some specified tags or fields are not matching any label')
+
         # Match field columns against provided arguments and convert labels into indexes
         self.field_columns_indexes = [self.labels.index(label) for label in self.field_columns]
 
@@ -80,6 +84,9 @@ class InfluxExporter(object):
         """
         Convert any iterable list of values to an influxdb line protocol valid text line.
         """
+        if not len(lst) == len(self.labels):
+            raise Exception('received %s values for %s labels' % (len(lst), len(self.labels)))
+
         tag_set = ','.join(['%s=%s' % (self.labels[i], self.sanitize(lst[i])) for i in self.tag_columns_indexes])
         key = ','.join([self.measurement] + [tag_set]) if tag_set else self.measurement
         field_set = ','.join(['%s=%s' % (self.labels[j], self.sanitize_field_value(value=lst[j], typ=self.field_types[self.labels[j]])) for j in self.field_columns_indexes])

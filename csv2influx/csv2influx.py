@@ -47,11 +47,14 @@ import shutil
 import tempfile
 from glob import glob
 
+from collections import OrderedDict
+
 import arrow
 import requests
 from docopt import docopt
 
-from influxexporter import InfluxExporter
+from influxdblineprotocolexporter import InfluxdbLineProtocolExporter
+
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -88,16 +91,23 @@ def process_input_file(input_path, output_path, arguments):
 
         csvreader = csv.reader(input_file, dialect)
         if not has_header:
-            raise Exception('csv2influx needs CSV headers to properly match and write fields\' and tags\' labels')
+            raise Exception('missing CSV headers; they are necessary to properly match and write fields\' and tags\' labels')
 
         # Extract header labels
         labels = [s.lower() for s in csvreader.next()]
 
-        influx_exporter = InfluxExporter(
+        # Isolate field columns and types
+        fields = OrderedDict()
+        for e in arguments['--field-columns'].split(','):
+            field_column, field_type = e.split(':')
+            fields[field_column] = field_type
+
+        exporter = InfluxdbLineProtocolExporter(
             labels=labels,
             measurement=arguments['--measurement'],
             tag_columns=arguments['--tag-columns'].split(',') if arguments['--tag-columns'] else [],
-            field_columns=arguments['--field-columns'].split(','),
+            field_columns=fields.keys(),
+            field_types=fields.values(),
             timestamp=arrow_string_to_nano_ts(arguments['--timestamp']) if arguments['--timestamp'] else None,
         )
 
@@ -105,7 +115,7 @@ def process_input_file(input_path, output_path, arguments):
         # when writing to a file *and* to a database at the same time
         buf = cStringIO.StringIO()
         for j, row in enumerate(csvreader):
-            buf.write(influx_exporter.to_line_protocol_format(row))
+            buf.write(exporter.export(row))
 
         buf.seek(0)
         shutil.copyfileobj(buf, output_file)

@@ -53,7 +53,7 @@ import arrow
 import requests
 from docopt import docopt
 
-from influxdblineprotocolexporter import InfluxdbLineProtocolExporter
+from lineprotocol import LineProtocolExporter
 
 
 logging.basicConfig(
@@ -102,7 +102,7 @@ def process_input_file(input_path, output_path, arguments):
             field_column, field_type = e.split(':')
             fields[field_column] = field_type
 
-        exporter = InfluxdbLineProtocolExporter(
+        exporter = LineProtocolExporter(
             labels=labels,
             measurement=arguments['--measurement'],
             tag_columns=arguments['--tag-columns'].split(',') if arguments['--tag-columns'] else [],

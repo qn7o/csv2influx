@@ -10,7 +10,7 @@ logging.basicConfig(
 
 class LineProtocolExporter(object):
     """
-    Export data to InfluxDB’s Line Protocol format based on specified input
+    Export data to InfluxDB's Line Protocol format based on specified input
     data structure (columns names) and desired output (measurement, fields,
     tags, timestamp).
 
@@ -19,7 +19,7 @@ class LineProtocolExporter(object):
     https://docs.influxdata.com/influxdb/v1.0/write_protocols/line_protocol_tutorial/#data-types
     https://docs.influxdata.com/influxdb/v1.0/write_protocols/line_protocol_tutorial/#special-characters-and-keywords
 
-    InfluxDB’s Line Protocol documentation can be found here:
+    InfluxDB's Line Protocol documentation can be found here:
     https://docs.influxdata.com/influxdb/v1.0/write_protocols/
     """
     VALID_FIELD_TYPES = ['float', 'int', 'str', 'bool']
@@ -93,7 +93,7 @@ class LineProtocolExporter(object):
 
     def export(self, lst):
         """
-        Convert any iterable list of values to an InfluxDB’s Line Protocol valid text line.
+        Convert any iterable list of values to an InfluxDB's Line Protocol valid text line.
         """
         if not len(lst) == len(self.labels):
             raise Exception('received %s values for %s labels' % (len(lst), len(self.labels)))

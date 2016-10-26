@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='csv2influx',
-    version='0.1',
+    version='0.1.dev0',
     description='Write CSV data into InfluxDB thanks to Influx\'s line protocol syntax',
     url='https://github.com/qn7o/csv2influx',
     author='Antonin Bourguignon',

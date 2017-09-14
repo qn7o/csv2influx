@@ -115,19 +115,19 @@ def process_input_file(input_path, output_path, arguments):
         # when writing to a file *and* to a database at the same time
         buf = cStringIO.StringIO()
         for j, row in enumerate(csvreader):
-            buf.write(exporter.export(row))
+            buf.write(exporter.export(row) + '\n')
 
         buf.seek(0)
         shutil.copyfileobj(buf, output_file)
-        logging.info('Wrote %d lines to file %s' % (j, output_file.name))
+        logging.info('Wrote result to file %s', output_file.name)
 
         if arguments['--influx-url']:
             r = requests.post(
                 url=arguments['--influx-url'],
                 data=buf.getvalue(),
-                headers={'Content-Type': 'application/x-www-form-urlencoded'}
+                headers={'Content-Type': 'application/octet-stream'}
             )
-            logging.info('Wrote %d lines to database %s' % (j, arguments['--influx-url']))
+            logging.info('Wrote result to database %s', arguments['--influx-url'])
 
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ setup(
     install_requires=[
         'docopt',
         'arrow',
+        'lineprotocol',
         'requests',
     ],
     entry_points = {

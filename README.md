@@ -1,8 +1,9 @@
 # csv2influx
 
-Write CSV data into InfluxDB thanks to Influx's Line Protocol syntax.
-The CSV files must have a header row so csv2inlux can properly match and write fields' and tags' labels.
-If you target more than one input CSV file, csv2influx will consider they are all identical in terms of structure and CSV options (delimiter, quoting, etc).
+Write CSV data into InfluxDB thanks to Influx's Line Protocol syntax.  It's based on [lineprotocol](https://github.com/qn7o/lineprotocol) package.
+
+The CSV files must have a header row so csv2inlux can properly match and write fields' and tags' labels.  
+If you target more than one input CSV file, csv2influx will consider they are all identical in terms of structure and CSV options (delimiter, quoting, etc).  
 csv2influx won't validate fields' types; it will just add trailing 'i' for integers and double quotes strings.
 Finally, tags won't be automatically sorted to improve performances.  Feel free to do so manually by providing --tag-columns with a sorted list if you prefer.
 
